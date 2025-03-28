@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		1A3FDCA42D974DA50090CF62 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 1A3FDCA32D974DA50090CF62 /* RealmSwift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		1A3FDC912D974D2A0090CF62 /* Hrysiuk_Lab5.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hrysiuk_Lab5.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A3FDCA42D974DA50090CF62 /* RealmSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = Hrysiuk_Lab5;
 			packageProductDependencies = (
+				1A3FDCA32D974DA50090CF62 /* RealmSwift */,
 			);
 			productName = Hrysiuk_Lab5;
 			productReference = 1A3FDC912D974D2A0090CF62 /* Hrysiuk_Lab5.app */;
@@ -94,6 +100,9 @@
 			);
 			mainGroup = 1A3FDC882D974D2A0090CF62;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				1A3FDCA22D974DA50090CF62 /* XCRemoteSwiftPackageReference "realm-swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 1A3FDC922D974D2A0090CF62 /* Products */;
 			projectDirPath = "";
@@ -324,6 +333,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1A3FDCA22D974DA50090CF62 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		1A3FDCA32D974DA50090CF62 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1A3FDCA22D974DA50090CF62 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 1A3FDC892D974D2A0090CF62 /* Project object */;
 }
