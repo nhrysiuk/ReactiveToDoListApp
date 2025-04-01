@@ -6,11 +6,12 @@
 //
 
 import SwiftUI
+import Combine
 
 struct AddTaskView: View {
     
     @Environment(\.dismiss) private var dismiss
-    
+    @EnvironmentObject private var viewModel: TodoListViewModel
     @State var task = TodoTask()
     
     var body: some View {
@@ -47,7 +48,8 @@ struct AddTaskView: View {
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Save") {
-                        
+                        viewModel.addTaskSubject.send(task)
+                        dismiss()
                     }
                     .disabled(task.name == "")
                 }

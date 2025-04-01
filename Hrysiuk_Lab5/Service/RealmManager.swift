@@ -7,41 +7,36 @@
 
 import Foundation
 import RealmSwift
+import Combine
 
 final class RealmManager {
     
     private let realm = try! Realm()
     
-    func getTasks() -> [RealmTodoTask] {
-        
-        let result = realm.objects(RealmTodoTask.self).toArray(ofType: RealmTodoTask.self)
-        
-        return Array(result)
+    func getTasks() -> AnyPublisher<[RealmTodoTask], Never> {
+        return Future() { [weak self] promise in
+            let result = self?.realm.objects(RealmTodoTask.self).toArray(ofType: RealmTodoTask.self)
+            promise(Result.success(result ?? []))
+        }.eraseToAnyPublisher()
+    }
+     
+    @discardableResult
+    func addTask(name: String, dueDate: Date, notes: String) -> AnyPublisher<Void, Never> {
+        return Future() { [weak self] promise in
+            let dbTask = RealmTodoTask(name: name, dueDate: dueDate, notes: notes, isDone: false)
+            try! self?.realm.write {
+                self?.realm.add(dbTask)
+            }
+            promise(Result.success(()))
+        }.eraseToAnyPublisher()
     }
     
-    func addTask(name: String, dueDate: Date, notes: String) -> UUID? {
-        let dbTask = RealmTodoTask(name: name, dueDate: dueDate, notes: notes, isDone: false)
-        try! realm.write {
-            realm.add(dbTask)
-        }
-        return dbTask.id
-    }
-    
-    func addMockTasks() {
-        let dbTask = RealmTodoTask(name: "Task 1", dueDate: Date(), notes: "notes", isDone: false)
-        let dbTask2 = RealmTodoTask(name: "Task 2", dueDate: Date(), notes: "notes2", isDone: false)
-        try! realm.write {
-            realm.add(dbTask)
-            realm.add(dbTask2)
-        }
-    }
-    
-    func deleteTask(task: RealmTodoTask) {
-        try! realm.write {
-            realm.delete(task)
-        }
-    }
-    
+//    func deleteTask(task: RealmTodoTask) {
+//        try! realm.write {
+//            realm.delete(task)
+//        }
+//    }
+//    
 //    func editTask(task: RealmTodoTask) {
 //        try! realm.write {
 //            
@@ -58,6 +53,7 @@ extension Results {
             }
         }
         
+        array.reverse()
         return array
     }
 }

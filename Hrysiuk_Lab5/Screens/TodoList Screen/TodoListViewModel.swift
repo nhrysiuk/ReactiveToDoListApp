@@ -6,21 +6,44 @@
 //
 
 import Foundation
+import Combine
 
 class TodoListViewModel: ObservableObject {
     
+    let addTaskSubject = PassthroughSubject<TodoTask, Never>()
+    var bag = Set<AnyCancellable>()
+    
     @Published var isAddViewPresented = false
-    @Published var tasks: [RealmTodoTask] = []
-
+    @Published private(set) var tasks: [RealmTodoTask] = []
     
     let realmManager = RealmManager()
     
-    func addMockTodo() {
-        realmManager.addMockTasks()
-        tasks = fetchTasks()
+    init() {
+        getTasks()
+        setupAddTaskSubject()
     }
     
-    func fetchTasks() -> [RealmTodoTask] {
+    func setupAddTaskSubject() {
+        addTaskSubject
+            .sink { [weak self] task in
+                self?.addTask(task: task)
+            }
+            .store(in: &bag)
+    }
+    
+    func getTasks() {
         realmManager.getTasks()
+            .sink { [weak self] tasks in
+                self?.tasks = tasks
+            }
+            .store(in: &bag)
+    }
+    
+    func addTask(task: TodoTask) {
+        realmManager.addTask(name: task.name, dueDate: task.dueDate, notes: task.notes)
+            .sink { [weak self] in
+                self?.getTasks()
+            }
+            .store(in: &bag)
     }
 }

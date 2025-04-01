@@ -34,10 +34,8 @@ struct TodoListView: View {
             .sheet(isPresented: $viewModel.isAddViewPresented) {
                 AddTaskView()
             }
-            .onAppear {
-                viewModel.addMockTodo()
-            }
         }
+        .environmentObject(viewModel)
     }
 }
 
