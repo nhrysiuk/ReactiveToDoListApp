@@ -18,6 +18,7 @@ struct TodoTask {
         self.isDone = task.isDone
     }
     
+    var id = UUID()
     var name: String = ""
     var dueDate: Date = Date()
     var notes: String = ""
