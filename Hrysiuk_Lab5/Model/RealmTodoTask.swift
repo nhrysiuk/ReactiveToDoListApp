@@ -13,10 +13,10 @@ final class RealmTodoTask: Object {
     @Persisted(primaryKey: true) var id = UUID()
     @Persisted var name: String
     @Persisted var dueDate: Date
-    @Persisted var notes: String
+    @Persisted var notes: String?
     @Persisted var isDone: Bool
     
-    convenience init(name: String, dueDate: Date, notes: String, isDone: Bool) {
+    convenience init(name: String, dueDate: Date, notes: String?, isDone: Bool) {
         self.init()
         
         self.name = name
@@ -25,7 +25,5 @@ final class RealmTodoTask: Object {
         self.isDone = isDone
     }
     
-    
     static let mockTodo = RealmTodoTask(name: "Mock Todo", dueDate: Date(), notes: "Important!", isDone: false)
 }
-

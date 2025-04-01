@@ -9,33 +9,34 @@ import SwiftUI
 
 struct TodoListView: View {
     
-    @State private var tasks: [RealmTodoTask] = []
     @StateObject var viewModel = TodoListViewModel()
     
     var body: some View {
-        VStack {
-            HStack {
-                Spacer()
-                Button("Add Task", systemImage: "plus") {
-                    
-                }
-            }
-            .padding(.trailing)
-            
-            ScrollView {
-                LazyVStack {
-                    ForEach(tasks, id: \.self) { task in
+        NavigationStack {
+            List {
+                ForEach(viewModel.tasks, id: \.self) { task in
+                    NavigationLink(value: task) {
                         TodoListCellView(for: task)
                     }
                 }
             }
+            .navigationDestination(for: RealmTodoTask.self) { task in
+                EditTaskView(task: task)
+            }
+            .listStyle(.sidebar)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("", systemImage: "plus") {
+                        viewModel.isAddViewPresented = true
+                    }
+                }
+            }
+            .sheet(isPresented: $viewModel.isAddViewPresented) {
+                AddTaskView()
+            }
             .onAppear {
                 viewModel.addMockTodo()
-                tasks = viewModel.fetchTasks()
             }
-        }
-        .sheet(isPresented: $viewModel.isModalPresented) {
-           
         }
     }
 }

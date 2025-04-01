@@ -17,9 +17,7 @@ struct TodoListCellView: View {
     
     var body: some View {
         HStack {
-            Button("", systemImage: "checkmark") {
-                
-            }
+            Image(systemName: task.isDone ? "checkmark.square.fill" : "square")
             Text(task.name)
             Spacer()
         }

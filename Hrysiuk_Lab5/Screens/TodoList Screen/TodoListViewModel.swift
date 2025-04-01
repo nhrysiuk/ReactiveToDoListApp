@@ -9,12 +9,15 @@ import Foundation
 
 class TodoListViewModel: ObservableObject {
     
-    @Published var isModalPresented = false
+    @Published var isAddViewPresented = false
+    @Published var tasks: [RealmTodoTask] = []
+
     
     let realmManager = RealmManager()
     
     func addMockTodo() {
         realmManager.addMockTasks()
+        tasks = fetchTasks()
     }
     
     func fetchTasks() -> [RealmTodoTask] {
