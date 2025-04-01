@@ -10,7 +10,7 @@ import SwiftUI
 struct TodoListCellView: View {
     
     @Binding var task: RealmTodoTask
-
+    
     var body: some View {
         HStack {
             Image(systemName: task.isDone ? "checkmark.square.fill" : "square")

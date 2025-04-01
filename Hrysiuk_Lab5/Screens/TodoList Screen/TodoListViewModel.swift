@@ -13,7 +13,7 @@ class TodoListViewModel: ObservableObject {
     let addTaskSubject = PassthroughSubject<TodoTask, Never>()
     let deleteTaskSubject = PassthroughSubject<Int, Never>()
     let editTaskSubject = PassthroughSubject<TodoTask, Never>()
-
+    
     var bag = Set<AnyCancellable>()
     
     @Published var isAddViewPresented = false
@@ -78,7 +78,7 @@ class TodoListViewModel: ObservableObject {
             }
             .store(in: &bag)
     }
-
+    
     func editTask(task: TodoTask) {
         realmManager.editTask(task)
             .sink { [weak self] in

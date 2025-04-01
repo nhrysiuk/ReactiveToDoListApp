@@ -13,6 +13,9 @@ struct TodoListView: View {
     
     var body: some View {
         NavigationStack {
+            if viewModel.tasks.isEmpty {
+                EmptyListView()
+            }
             List {
                 ForEach(viewModel.tasks.indices, id: \.self) { index in
                     NavigationLink(value: viewModel.tasks[index]) {
@@ -23,7 +26,6 @@ struct TodoListView: View {
                     guard let index = indexSet.first else { return }
                     viewModel.deleteTaskSubject
                         .send(index)
-                    print(viewModel.tasks)
                 }
             }
             .navigationDestination(for: RealmTodoTask.self) { task in

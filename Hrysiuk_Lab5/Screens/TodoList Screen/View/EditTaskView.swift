@@ -12,7 +12,7 @@ struct EditTaskView: View {
     @Environment(\.dismiss) private var dismiss
     @State var task: TodoTask
     @EnvironmentObject private var viewModel: TodoListViewModel
-
+    
     init(task: RealmTodoTask) {
         self.task = TodoTask(from: task)
     }
