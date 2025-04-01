@@ -12,6 +12,7 @@ struct AddTaskView: View {
     
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var viewModel: TodoListViewModel
+    
     @State var task = TodoTask()
     
     var body: some View {

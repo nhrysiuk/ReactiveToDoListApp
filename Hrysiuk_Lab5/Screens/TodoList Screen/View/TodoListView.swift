@@ -9,21 +9,27 @@ import SwiftUI
 
 struct TodoListView: View {
     
-    @StateObject var viewModel = TodoListViewModel()
+    @EnvironmentObject var viewModel: TodoListViewModel
     
     var body: some View {
         NavigationStack {
             List {
-                ForEach(viewModel.tasks, id: \.self) { task in
-                    NavigationLink(value: task) {
-                        TodoListCellView(for: task)
+                ForEach(viewModel.tasks.indices, id: \.self) { index in
+                    NavigationLink(value: viewModel.tasks[index]) {
+                        TodoListCellView(task: $viewModel.tasks[index])
                     }
+                }
+                .onDelete { indexSet in
+                    guard let index = indexSet.first else { return }
+                    viewModel.deleteTaskSubject
+                        .send(index)
+                    print(viewModel.tasks)
                 }
             }
             .navigationDestination(for: RealmTodoTask.self) { task in
                 EditTaskView(task: task)
             }
-            .listStyle(.sidebar)
+            
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("", systemImage: "plus") {
@@ -35,7 +41,6 @@ struct TodoListView: View {
                 AddTaskView()
             }
         }
-        .environmentObject(viewModel)
     }
 }
 

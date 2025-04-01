@@ -9,12 +9,8 @@ import SwiftUI
 
 struct TodoListCellView: View {
     
-    @State private var task: RealmTodoTask
-    
-    init(for task: RealmTodoTask) {
-        self.task = task
-    }
-    
+    @Binding var task: RealmTodoTask
+
     var body: some View {
         HStack {
             Image(systemName: task.isDone ? "checkmark.square.fill" : "square")
@@ -25,6 +21,3 @@ struct TodoListCellView: View {
     }
 }
 
-#Preview {
-    TodoListCellView(for: RealmTodoTask.mockTodo)
-}

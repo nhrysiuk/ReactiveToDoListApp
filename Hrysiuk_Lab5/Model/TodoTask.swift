@@ -12,6 +12,7 @@ struct TodoTask {
     init() {}
     
     init(from task: RealmTodoTask) {
+        self.id = task.id
         self.name = task.name
         self.dueDate = task.dueDate
         self.notes = task.notes ?? ""

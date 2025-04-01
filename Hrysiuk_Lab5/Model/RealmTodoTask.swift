@@ -8,7 +8,7 @@
 import Foundation
 import RealmSwift
 
-final class RealmTodoTask: Object {
+final class RealmTodoTask: Object, Identifiable {
     
     @Persisted(primaryKey: true) var id = UUID()
     @Persisted var name: String
@@ -23,6 +23,16 @@ final class RealmTodoTask: Object {
         self.dueDate = dueDate
         self.notes = notes
         self.isDone = isDone
+    }
+    
+    convenience init(from todoTask: TodoTask) {
+        self.init()
+        
+        self.id = todoTask.id
+        self.isDone = todoTask.isDone
+        self.name = todoTask.name
+        self.dueDate = todoTask.dueDate
+        self.notes = todoTask.notes
     }
     
     static let mockTodo = RealmTodoTask(name: "Mock Todo", dueDate: Date(), notes: "Important!", isDone: false)
