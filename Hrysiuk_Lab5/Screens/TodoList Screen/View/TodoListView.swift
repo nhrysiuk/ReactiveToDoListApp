@@ -17,7 +17,7 @@ struct TodoListView: View {
                 EmptyListView()
             }
             List {
-                ForEach(viewModel.tasks.indices, id: \.self) { index in
+                ForEach(viewModel.searchResults.indices, id: \.self) { index in
                     NavigationLink(value: viewModel.tasks[index]) {
                         TodoListCellView(task: $viewModel.tasks[index])
                     }
@@ -31,7 +31,7 @@ struct TodoListView: View {
             .navigationDestination(for: TodoTask.self) { task in
                 EditTaskView(task: task)
             }
-            
+            .searchable(text: $viewModel.searchText)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("", systemImage: "plus") {

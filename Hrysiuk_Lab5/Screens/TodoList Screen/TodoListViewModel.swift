@@ -10,6 +10,15 @@ import Combine
 
 class TodoListViewModel: ObservableObject {
     
+    @Published var searchText: String = ""
+    var searchResults: [TodoTask] {
+           if searchText.isEmpty {
+               return tasks
+           } else {
+               return tasks.filter { $0.name.contains(searchText) }
+           }
+       }
+    
     let addTaskSubject = PassthroughSubject<TodoTask, Never>()
     let deleteTaskSubject = PassthroughSubject<Int, Never>()
     let editTaskSubject = PassthroughSubject<TodoTask, Never>()
