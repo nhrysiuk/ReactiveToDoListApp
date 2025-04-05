@@ -13,7 +13,7 @@ final class RealmManager {
     
     private let realm = try! Realm()
     
-    func getTasksNormal() -> [RealmTodoTask] {
+    private func getTasksNormal() -> [RealmTodoTask] {
         return realm.objects(RealmTodoTask.self).toArray(ofType: RealmTodoTask.self)
     }
     
@@ -40,10 +40,11 @@ final class RealmManager {
         }.eraseToAnyPublisher()
     }
     
-    func deleteTask(_ task: RealmTodoTask) -> AnyPublisher<Void, Never>  {
+    func deleteTask(_ task: TodoTask) -> AnyPublisher<Void, Never>  {
         return Future() { [weak self] promise in
+            guard let realmTask = self?.getTasksNormal().first(where: {$0.id == task.id}) else { return }
             try! self?.realm.write {
-                self?.realm.delete(task)
+                self?.realm.delete(realmTask)
             }
             promise(Result.success(()))
         }.eraseToAnyPublisher()
@@ -58,6 +59,7 @@ final class RealmManager {
                 realmTask.isDone = task.isDone
                 realmTask.dueDate = task.dueDate
                 realmTask.notes = task.notes
+                realmTask.priority = task.priority.rawValue
             }
             promise(Result.success(()))
         }.eraseToAnyPublisher()

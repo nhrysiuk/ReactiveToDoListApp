@@ -9,15 +9,16 @@ import SwiftUI
 
 struct TodoListCellView: View {
     
-    @Binding var task: RealmTodoTask
+    @Binding var task: TodoTask
     
     var body: some View {
         HStack {
             Image(systemName: task.isDone ? "checkmark.square.fill" : "square")
             Text(task.name)
             Spacer()
+            Image(systemName: task.priority.image.name)
+                .foregroundStyle(task.priority.image.color)
         }
         .padding()
     }
 }
-

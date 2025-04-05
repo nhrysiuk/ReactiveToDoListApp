@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TodoTask {
+struct TodoTask: Hashable {
     
     init() {}
     
@@ -17,6 +17,7 @@ struct TodoTask {
         self.dueDate = task.dueDate
         self.notes = task.notes ?? ""
         self.isDone = task.isDone
+        self.priority = Priority(rawValue: task.priority) ?? .low
     }
     
     var id = UUID()
@@ -24,4 +25,5 @@ struct TodoTask {
     var dueDate: Date = Date()
     var notes: String = ""
     var isDone: Bool = false
+    var priority: Priority = .low
 }

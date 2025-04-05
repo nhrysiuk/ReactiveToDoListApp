@@ -13,8 +13,8 @@ struct EditTaskView: View {
     @State var task: TodoTask
     @EnvironmentObject private var viewModel: TodoListViewModel
     
-    init(task: RealmTodoTask) {
-        self.task = TodoTask(from: task)
+    init(task: TodoTask) {
+        self.task = task
     }
     
     var body: some View {
@@ -27,6 +27,13 @@ struct EditTaskView: View {
             }
             
             Section {
+                HStack(alignment: .top) {
+                    Picker("Priority", selection: $task.priority) {
+                        Text("Low").tag(Priority.low)
+                        Text("Medium").tag(Priority.medium)
+                        Text("High").tag(Priority.high)
+                    }
+                }
                 HStack(alignment: .top) {
                     Text("Notes")
                     TextField("Enter notes...", text: $task.notes, axis: .vertical)

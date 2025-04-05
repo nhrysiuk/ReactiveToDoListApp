@@ -28,7 +28,7 @@ struct TodoListView: View {
                         .send(index)
                 }
             }
-            .navigationDestination(for: RealmTodoTask.self) { task in
+            .navigationDestination(for: TodoTask.self) { task in
                 EditTaskView(task: task)
             }
             

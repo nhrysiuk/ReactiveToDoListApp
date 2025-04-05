@@ -15,14 +15,16 @@ final class RealmTodoTask: Object, Identifiable {
     @Persisted var dueDate: Date
     @Persisted var notes: String?
     @Persisted var isDone: Bool
+    @Persisted var priority: String
     
-    convenience init(name: String, dueDate: Date, notes: String?, isDone: Bool) {
+    convenience init(name: String, dueDate: Date, notes: String?, isDone: Bool, priority: String) {
         self.init()
         
         self.name = name
         self.dueDate = dueDate
         self.notes = notes
         self.isDone = isDone
+        self.priority = priority
     }
     
     convenience init(from todoTask: TodoTask) {
@@ -33,7 +35,6 @@ final class RealmTodoTask: Object, Identifiable {
         self.name = todoTask.name
         self.dueDate = todoTask.dueDate
         self.notes = todoTask.notes
+        self.priority = todoTask.priority.rawValue
     }
-    
-    static let mockTodo = RealmTodoTask(name: "Mock Todo", dueDate: Date(), notes: "Important!", isDone: false)
 }

@@ -17,7 +17,7 @@ class TodoListViewModel: ObservableObject {
     var bag = Set<AnyCancellable>()
     
     @Published var isAddViewPresented = false
-    @Published var tasks: [RealmTodoTask] = []
+    @Published var tasks: [TodoTask] = []
     
     let realmManager = RealmManager()
     
@@ -54,9 +54,11 @@ class TodoListViewModel: ObservableObject {
     
     func getTasks() {
         realmManager.getTasks()
+            .map { realmTasks in
+                realmTasks.map { TodoTask(from: $0) }
+            }
             .sink { [weak self] tasks in
                 self?.tasks = tasks
-                
             }
             .store(in: &bag)
     }

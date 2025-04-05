@@ -27,6 +27,13 @@ struct AddTaskView: View {
                 
                 Section {
                     HStack(alignment: .top) {
+                        Picker("Priority", selection: $task.priority) {
+                            Text("Low").tag(Priority.low)
+                            Text("Medium").tag(Priority.medium)
+                            Text("High").tag(Priority.high)
+                        }
+                    }
+                    HStack(alignment: .top) {
                         Text("Notes")
                         TextField("Enter notes...", text: $task.notes, axis: .vertical)
                             .lineLimit(2...7)
