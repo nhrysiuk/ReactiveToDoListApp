@@ -50,6 +50,7 @@ struct TodoListView: View {
                         }
                     }
                 }
+                .navigationTitle("📌To do")
             }
         }
         .sheet(isPresented: $viewModel.isAddViewPresented) {

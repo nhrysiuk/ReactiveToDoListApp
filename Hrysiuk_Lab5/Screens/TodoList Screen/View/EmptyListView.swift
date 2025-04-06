@@ -30,6 +30,5 @@ struct EmptyListView: View {
                 isModalPresented = true
             }
         }
-        .background(.clear)
     }
 }
