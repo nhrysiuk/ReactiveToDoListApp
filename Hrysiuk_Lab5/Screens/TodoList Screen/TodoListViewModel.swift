@@ -10,6 +10,8 @@ import Combine
 
 class TodoListViewModel: ObservableObject {
     
+    @Published var isLoading = true
+    
     @Published var searchText: String = ""
     var searchResults: [TodoTask] {
         if searchText.isEmpty {
@@ -28,9 +30,12 @@ class TodoListViewModel: ObservableObject {
     
     init() {
         TaskManager.shared.fetchTasks()
-        
         setupTasksBinding()
         setupDeleteTaskSubject()
+        DispatchQueue.main.async { [weak self] in
+            self?.isLoading = false
+        }
+
     }
     
     func setupTasksBinding() {

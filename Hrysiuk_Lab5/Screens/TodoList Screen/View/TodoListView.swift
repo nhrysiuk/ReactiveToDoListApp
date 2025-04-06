@@ -13,8 +13,11 @@ struct TodoListView: View {
     
     var body: some View {
         NavigationStack {
-            if viewModel.tasks.isEmpty {
+            if viewModel.tasks.isEmpty && !viewModel.isLoading {
                 EmptyListView(isModalPresented: $viewModel.isAddViewPresented)
+            } else if viewModel.isLoading {
+                ProgressView("Fetching the tasks...")
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 List {
                     ForEach(viewModel.searchResults, id: \.id) { task in
