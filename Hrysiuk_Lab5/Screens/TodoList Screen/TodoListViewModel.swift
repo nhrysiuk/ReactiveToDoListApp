@@ -28,6 +28,8 @@ class TodoListViewModel: ObservableObject {
     @Published var isAddViewPresented = false
     @Published var tasks: [TodoTask] = []
     
+    private var sortType: SortType = .additionDate
+    
     init() {
         TaskManager.shared.fetchTasks()
         setupTasksBinding()
@@ -35,12 +37,15 @@ class TodoListViewModel: ObservableObject {
         DispatchQueue.main.async { [weak self] in
             self?.isLoading = false
         }
-
+        
     }
     
     func setupTasksBinding() {
         TaskManager.shared.$tasks
             .receive(on: DispatchQueue.main)
+            .map { [weak self] tasks in
+                return self?.sortIfNeeded(tasks: tasks) ?? tasks
+            }
             .assign(to: \.tasks, on: self)
             .store(in: &bag)
     }
@@ -57,34 +62,54 @@ class TodoListViewModel: ObservableObject {
     }
     
     //MARK: - sort functions
-    func sortByDate() {
-        tasks.sort(by: { $0.dueDate < $1.dueDate })
-    }
-    
-    func sortByPriority() {
-        tasks.sort(by: { $0.priority > $1.priority })
-    }
     
     typealias AreInIncreasingOrder = (TodoTask, TodoTask) -> Bool
     
+    private func sortTasks(using predicate: @escaping AreInIncreasingOrder, sortType: SortType) {
+        tasks.sort(by: predicate)
+        self.sortType = sortType
+    }
+    
+    func sortByDate() {
+        sortTasks(using: { $0.dueDate < $1.dueDate }, sortType: .dueDate)
+    }
+    
+    func sortByPriority() {
+        sortTasks(using: { $0.priority > $1.priority }, sortType: .priority)
+    }
+    
     func sortByDefault() {
-        tasks.sort(by: { (lhs, rhs) in
+        sortTasks(using: sortDefaultPredicate, sortType: .default)
+    }
+    
+    private func sortIfNeeded(tasks: [TodoTask]) -> [TodoTask] {
+        switch sortType {
+        case .default:
+            return tasks.sorted(by: sortDefaultPredicate)
+        case .priority:
+            return tasks.sorted(by: { $0.priority > $1.priority })
+        case .dueDate:
+            return tasks.sorted(by: { $0.dueDate < $1.dueDate })
+        case .additionDate:
+            return tasks 
+        }
+    }
+    
+    private var sortDefaultPredicate: AreInIncreasingOrder {
+        return { lhs, rhs in
             let predicates: [AreInIncreasingOrder] = [
                 { $0.isDone && !$1.isDone },
-                { $0.priority > $1.priority},
+                { $0.priority > $1.priority },
                 { $0.dueDate < $1.dueDate },
                 { $0.name < $1.name },
             ]
             
             for predicate in predicates {
-                if !predicate(lhs, rhs) && !predicate(rhs, lhs) {
-                    continue
-                }
-                
-                return predicate(lhs, rhs)
+                if predicate(lhs, rhs) { return true }
+                if predicate(rhs, lhs) { return false }
             }
             
             return false
-        })
+        }
     }
 }
