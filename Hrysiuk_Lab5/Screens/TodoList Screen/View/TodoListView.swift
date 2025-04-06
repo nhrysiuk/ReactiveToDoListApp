@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TodoListView: View {
     
-    @EnvironmentObject var viewModel: TodoListViewModel
+    @StateObject var viewModel = TodoListViewModel()
     
     var body: some View {
         NavigationStack {
@@ -17,9 +17,9 @@ struct TodoListView: View {
                 EmptyListView(isModalPresented: $viewModel.isAddViewPresented)
             } else {
                 List {
-                    ForEach(viewModel.searchResults.indices, id: \.self) { index in
-                        NavigationLink(value: viewModel.tasks[index]) {
-                            TodoListCellView(task: viewModel.tasks[index])
+                    ForEach(viewModel.searchResults, id: \.id) { task in
+                        NavigationLink(value: task) {
+                            TodoListCellView(task: task)
                         }
                     }
                     .onDelete { indexSet in
@@ -49,13 +49,9 @@ struct TodoListView: View {
                 }
             }
         }
-                .sheet(isPresented: $viewModel.isAddViewPresented) {
-                    AddTaskView()
-                }
-            
+        .sheet(isPresented: $viewModel.isAddViewPresented) {
+            AddTaskView()
         }
+        
     }
-
-#Preview {
-    TodoListView()
 }

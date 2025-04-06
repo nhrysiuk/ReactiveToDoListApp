@@ -8,12 +8,8 @@
 import SwiftUI
 
 struct RootView: View {
-    
-    @StateObject var viewModel = TodoListViewModel()
-    
     var body: some View {
         TodoListView()
-            .environmentObject(viewModel)
     }
 }
 

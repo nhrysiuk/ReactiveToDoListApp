@@ -47,7 +47,7 @@ final class TaskManager: ObservableObject {
     
     func delete(id: UUID) {
         RealmManager.shared.deleteTask(id)
-            .sink { [weak self] in
+            .sink { [weak self] tasks in
                 self?.fetchTasks()
             }
             .store(in: &bag)

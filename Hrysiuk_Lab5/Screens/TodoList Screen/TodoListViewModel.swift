@@ -12,20 +12,20 @@ class TodoListViewModel: ObservableObject {
     
     @Published var searchText: String = ""
     var searchResults: [TodoTask] {
-           if searchText.isEmpty {
-               return tasks
-           } else {
-               return tasks.filter { $0.name.contains(searchText) }
-           }
-       }
-
+        if searchText.isEmpty {
+            return tasks
+        } else {
+            return tasks.filter { $0.name.contains(searchText) }
+        }
+    }
+    
     let deleteTaskSubject = PassthroughSubject<Int, Never>()
     
     var bag = Set<AnyCancellable>()
     
     @Published var isAddViewPresented = false
     @Published var tasks: [TodoTask] = []
-        
+    
     init() {
         TaskManager.shared.fetchTasks()
         
