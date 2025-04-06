@@ -25,13 +25,14 @@ final class RealmManager {
     }
     
     @discardableResult
-    func addTask(name: String, dueDate: Date, notes: String) -> AnyPublisher<Void, Never> {
+    func addTask(name: String, dueDate: Date, notes: String, priority: Priority) -> AnyPublisher<Void, Never> {
         return Future() { [weak self] promise in
             let dbTask = RealmTodoTask()
             dbTask.name = name
             dbTask.dueDate = dueDate
             dbTask.notes = notes
             dbTask.isDone = false
+            dbTask.priority = priority.rawValue
             
             try! self?.realm.write {
                 self?.realm.add(dbTask)

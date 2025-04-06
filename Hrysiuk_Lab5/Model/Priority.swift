@@ -8,7 +8,7 @@
 import SwiftUI
 import Realm
 
-enum Priority: String {
+enum Priority: String, Comparable {
     
     case low
     case medium
@@ -23,5 +23,20 @@ enum Priority: String {
         case .low:
             return ("exclamationmark", .green)
         }
+    }
+    
+    var number: Int {
+        switch self {
+        case .high:
+            return 1
+        case .medium:
+            return 2
+        case .low:
+            return 3
+        }
+    }
+    
+    static func < (lhs: Priority, rhs: Priority) -> Bool {
+        lhs.number > rhs.number
     }
 }

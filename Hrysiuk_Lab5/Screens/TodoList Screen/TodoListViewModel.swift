@@ -73,7 +73,7 @@ class TodoListViewModel: ObservableObject {
     }
     
     func addTask(task: TodoTask) {
-        realmManager.addTask(name: task.name, dueDate: task.dueDate, notes: task.notes)
+        realmManager.addTask(name: task.name, dueDate: task.dueDate, notes: task.notes, priority: task.priority)
             .sink { [weak self] in
                 self?.getTasks()
             }
@@ -96,5 +96,36 @@ class TodoListViewModel: ObservableObject {
                 self?.getTasks()
             }
             .store(in: &bag)
+    }
+    
+    func sortByDate() {
+        tasks.sort(by: { $0.dueDate < $1.dueDate })
+    }
+    
+    func sortByPriority() {
+        tasks.sort(by: { $0.priority > $1.priority })
+    }
+    
+    typealias AreInIncreasingOrder = (TodoTask, TodoTask) -> Bool
+    
+    func sortByDefault() {
+        tasks.sort(by: { (lhs, rhs) in
+            let predicates: [AreInIncreasingOrder] = [
+                { $0.isDone && !$1.isDone },
+                { $0.priority > $1.priority},
+                { $0.dueDate < $1.dueDate },
+                { $0.name < $1.name },
+            ]
+            
+            for predicate in predicates {
+                if !predicate(lhs, rhs) && !predicate(rhs, lhs) {
+                    continue
+                }
+                
+                return predicate(lhs, rhs)
+            }
+            
+            return false
+        })
     }
 }

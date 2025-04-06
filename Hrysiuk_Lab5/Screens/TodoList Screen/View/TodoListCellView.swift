@@ -16,6 +16,8 @@ struct TodoListCellView: View {
             Image(systemName: task.isDone ? "checkmark.square.fill" : "square")
             Text(task.name)
             Spacer()
+            Text(DateFormatter.dateAndTime.string(from: task.dueDate))
+                .foregroundStyle(task.dueDate > Date() ? .green : .red)
             Image(systemName: task.priority.image.name)
                 .foregroundStyle(task.priority.image.color)
         }

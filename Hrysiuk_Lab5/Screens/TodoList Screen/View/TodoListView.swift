@@ -34,6 +34,14 @@ struct TodoListView: View {
             .searchable(text: $viewModel.searchText)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
+                    Menu("", systemImage: "arrow.up.arrow.down"){
+                        Button("By date", action: viewModel.sortByDate)
+                        Button("By priority", action: viewModel.sortByPriority)
+                        Button("By default", action: viewModel.sortByDefault)
+                    }
+                }
+                
+                ToolbarItem(placement: .topBarTrailing) {
                     Button("", systemImage: "plus") {
                         viewModel.isAddViewPresented = true
                     }
