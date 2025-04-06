@@ -14,7 +14,7 @@ struct TodoListView: View {
     var body: some View {
         NavigationStack {
             if viewModel.tasks.isEmpty {
-                EmptyListView()
+                EmptyListView(isModalPresented: $viewModel.isAddViewPresented)
             }
             List {
                 ForEach(viewModel.searchResults.indices, id: \.self) { index in

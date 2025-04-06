@@ -9,8 +9,8 @@ import SwiftUI
 
 struct EmptyListView: View {
     
-    @State private var isModalPresented = false
-    @EnvironmentObject var viewModel: TodoListViewModel
+    @Binding var isModalPresented: Bool
+    
     var body: some View {
         VStack {
             Spacer()
@@ -31,13 +31,6 @@ struct EmptyListView: View {
                 isModalPresented = true
             }
         }
-        .sheet(isPresented: $isModalPresented) {
-            AddTaskView()
-        }
         .background(.clear)
     }
-}
-
-#Preview {
-    EmptyListView()
 }
