@@ -20,8 +20,11 @@ struct AddTaskView: View {
             Form {
                 Section {
                     HStack {
-                        Text("Name")
-                        TextField("Enter name...", text: $task.name)
+                        TextField("Name", text: $task.name)
+                    }
+                    HStack(alignment: .top) {
+                        TextField("Notes", text: $task.notes, axis: .vertical)
+                            .lineLimit(2...7)
                     }
                 }
                 

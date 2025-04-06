@@ -21,8 +21,11 @@ struct EditTaskView: View {
         Form {
             Section {
                 HStack {
-                    Text("Name")
-                    TextField("Enter name...", text: $task.name)
+                    TextField("Name", text: $task.name)
+                }
+                HStack(alignment: .top) {
+                    TextField("Notes", text: $task.notes, axis: .vertical)
+                        .lineLimit(2...7)
                 }
             }
             
@@ -33,11 +36,6 @@ struct EditTaskView: View {
                         Text("Medium").tag(Priority.medium)
                         Text("High").tag(Priority.high)
                     }
-                }
-                HStack(alignment: .top) {
-                    Text("Notes")
-                    TextField("Enter notes...", text: $task.notes, axis: .vertical)
-                        .lineLimit(2...7)
                 }
                 HStack {
                     Text("Due date")
