@@ -18,86 +18,40 @@ class TodoListViewModel: ObservableObject {
                return tasks.filter { $0.name.contains(searchText) }
            }
        }
-    
-    let addTaskSubject = PassthroughSubject<TodoTask, Never>()
+
     let deleteTaskSubject = PassthroughSubject<Int, Never>()
-    let editTaskSubject = PassthroughSubject<TodoTask, Never>()
     
     var bag = Set<AnyCancellable>()
     
     @Published var isAddViewPresented = false
     @Published var tasks: [TodoTask] = []
-    
-    let realmManager = RealmManager()
-    
+        
     init() {
-        getTasks()
-        setupAddTaskSubject()
+        TaskManager.shared.fetchTasks()
+        
+        setupTasksBinding()
         setupDeleteTaskSubject()
-        setupEditTaskSubject()
     }
     
-    func setupAddTaskSubject() {
-        addTaskSubject
-            .sink { [weak self] task in
-                self?.addTask(task: task)
-            }
-            .store(in: &bag)
-    }
-    
-    func setupEditTaskSubject() {
-        editTaskSubject
-            .sink { [weak self] task in
-                self?.editTask(task: task)
-            }
+    func setupTasksBinding() {
+        TaskManager.shared.$tasks
+            .receive(on: DispatchQueue.main)
+            .assign(to: \.tasks, on: self)
             .store(in: &bag)
     }
     
     func setupDeleteTaskSubject() {
         deleteTaskSubject
             .sink { [weak self] index in
-                self?.deleteTask(at: index)
+                let id = self?.tasks[index].id
+                guard let id else { return }
+                
+                TaskManager.shared.delete(id: id)
             }
             .store(in: &bag)
     }
     
-    func getTasks() {
-        realmManager.getTasks()
-            .map { realmTasks in
-                realmTasks.map { TodoTask(from: $0) }
-            }
-            .sink { [weak self] tasks in
-                self?.tasks = tasks
-            }
-            .store(in: &bag)
-    }
-    
-    func addTask(task: TodoTask) {
-        realmManager.addTask(name: task.name, dueDate: task.dueDate, notes: task.notes, priority: task.priority)
-            .sink { [weak self] in
-                self?.getTasks()
-            }
-            .store(in: &bag)
-    }
-    
-    func deleteTask(at index: Int) {
-        let task = tasks[index]
-        
-        realmManager.deleteTask(task)
-            .sink { [weak self] in
-                self?.getTasks()
-            }
-            .store(in: &bag)
-    }
-    
-    func editTask(task: TodoTask) {
-        realmManager.editTask(task)
-            .sink { [weak self] in
-                self?.getTasks()
-            }
-            .store(in: &bag)
-    }
-    
+    //MARK: - sort functions
     func sortByDate() {
         tasks.sort(by: { $0.dueDate < $1.dueDate })
     }

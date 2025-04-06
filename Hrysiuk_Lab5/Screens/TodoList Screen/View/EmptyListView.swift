@@ -13,7 +13,6 @@ struct EmptyListView: View {
     
     var body: some View {
         VStack {
-            Spacer()
             Image(systemName: "figure.snowboarding")
                 .resizable()
                 .scaledToFit()

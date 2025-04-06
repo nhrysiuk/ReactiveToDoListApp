@@ -11,7 +11,7 @@ struct EditTaskView: View {
     
     @Environment(\.dismiss) private var dismiss
     @State var task: TodoTask
-    @EnvironmentObject private var viewModel: TodoListViewModel
+    @StateObject private var viewModel = EditTaskViewModel()
     
     init(task: TodoTask) {
         self.task = task

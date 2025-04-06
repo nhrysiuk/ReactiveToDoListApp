@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TodoListCellView: View {
     
-    @Binding var task: TodoTask
+    let task: TodoTask
     
     var body: some View {
         HStack {

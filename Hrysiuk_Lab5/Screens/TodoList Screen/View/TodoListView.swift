@@ -15,44 +15,46 @@ struct TodoListView: View {
         NavigationStack {
             if viewModel.tasks.isEmpty {
                 EmptyListView(isModalPresented: $viewModel.isAddViewPresented)
-            }
-            List {
-                ForEach(viewModel.searchResults.indices, id: \.self) { index in
-                    NavigationLink(value: viewModel.tasks[index]) {
-                        TodoListCellView(task: $viewModel.tasks[index])
+            } else {
+                List {
+                    ForEach(viewModel.searchResults.indices, id: \.self) { index in
+                        NavigationLink(value: viewModel.tasks[index]) {
+                            TodoListCellView(task: viewModel.tasks[index])
+                        }
+                    }
+                    .onDelete { indexSet in
+                        guard let index = indexSet.first else { return }
+                        viewModel.deleteTaskSubject
+                            .send(index)
                     }
                 }
-                .onDelete { indexSet in
-                    guard let index = indexSet.first else { return }
-                    viewModel.deleteTaskSubject
-                        .send(index)
+                .navigationDestination(for: TodoTask.self) { task in
+                    EditTaskView(task: task)
                 }
-            }
-            .navigationDestination(for: TodoTask.self) { task in
-                EditTaskView(task: task)
-            }
-            .searchable(text: $viewModel.searchText)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Menu("", systemImage: "arrow.up.arrow.down"){
-                        Button("By date", action: viewModel.sortByDate)
-                        Button("By priority", action: viewModel.sortByPriority)
-                        Button("By default", action: viewModel.sortByDefault)
+                .searchable(text: $viewModel.searchText)
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Menu("", systemImage: "arrow.up.arrow.down"){
+                            Button("By date", action: viewModel.sortByDate)
+                            Button("By priority", action: viewModel.sortByPriority)
+                            Button("By default", action: viewModel.sortByDefault)
+                        }
+                    }
+                    
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button("", systemImage: "plus") {
+                            viewModel.isAddViewPresented = true
+                        }
                     }
                 }
-                
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("", systemImage: "plus") {
-                        viewModel.isAddViewPresented = true
-                    }
-                }
-            }
-            .sheet(isPresented: $viewModel.isAddViewPresented) {
-                AddTaskView()
             }
         }
+                .sheet(isPresented: $viewModel.isAddViewPresented) {
+                    AddTaskView()
+                }
+            
+        }
     }
-}
 
 #Preview {
     TodoListView()

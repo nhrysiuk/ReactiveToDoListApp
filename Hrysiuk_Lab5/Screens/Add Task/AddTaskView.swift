@@ -11,7 +11,7 @@ import Combine
 struct AddTaskView: View {
     
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var viewModel: TodoListViewModel
+    @StateObject private var viewModel = AddTaskViewModel()
     
     @State var task = TodoTask()
     
@@ -64,8 +64,4 @@ struct AddTaskView: View {
             }
         }
     }
-}
-
-#Preview {
-    AddTaskView()
 }

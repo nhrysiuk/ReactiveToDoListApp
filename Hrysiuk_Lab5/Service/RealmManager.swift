@@ -11,6 +11,10 @@ import Combine
 
 final class RealmManager {
     
+    static let shared = RealmManager()
+    
+    private init() {}
+    
     private let realm = try! Realm()
     
     private func getTasksNormal() -> [RealmTodoTask] {
@@ -41,9 +45,9 @@ final class RealmManager {
         }.eraseToAnyPublisher()
     }
     
-    func deleteTask(_ task: TodoTask) -> AnyPublisher<Void, Never>  {
+    func deleteTask(_ id: UUID) -> AnyPublisher<Void, Never>  {
         return Future() { [weak self] promise in
-            guard let realmTask = self?.getTasksNormal().first(where: {$0.id == task.id}) else { return }
+            guard let realmTask = self?.getTasksNormal().first(where: {$0.id == id }) else { return }
             try! self?.realm.write {
                 self?.realm.delete(realmTask)
             }
