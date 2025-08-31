@@ -15,7 +15,7 @@ It follows the MVVM architecture and uses Realm for persistent data storage.
 
 ## 📸 Screenshots
 <div style="display: flex; justify-content: space-between; gap: 10px;">
-  <img src="https://github.com/user-attachments/assets/97152976-c660-41ab-bbea-113227e9cc7c" width="300">
-  <img src="https://github.com/user-attachments/assets/b6d63974-9326-4595-9757-1d4fa0e57388" width="300">
-  <img src="https://github.com/user-attachments/assets/1a520cf9-3d0c-42d5-8530-27d541f0ff93" width="300">
+  <img src="https://github.com/user-attachments/assets/97152976-c660-41ab-bbea-113227e9cc7c" width="200">
+  <img src="https://github.com/user-attachments/assets/b6d63974-9326-4595-9757-1d4fa0e57388" width="200">
+  <img src="https://github.com/user-attachments/assets/1a520cf9-3d0c-42d5-8530-27d541f0ff93" width="200">
 </div>
